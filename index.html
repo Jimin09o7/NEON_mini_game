@@ -1,193 +1,150 @@
-# 밝은 테마로 업데이트된 통합 게임 허브 코드입니다.
-html_code = """
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>University Student's Game Hub - Light Mode</title>
+    <title>INU MINI GAME HUB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        /* [전체 배경 및 폰트 설정] */
-        body { 
-            margin: 0; 
-            background-color: #f8f9fa; /* 밝은 회색 배경 */
-            color: #2d3436; 
-            font-family: 'Pretendard', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
+        /* [전체 배경 설정]: 아주 연한 하늘빛/회색 배경 */
+        body {
+            margin: 0;
+            background-color: #f0f5fa; 
+            color: #1d3557;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
-        /* [메인 메뉴 스타일] */
-        #main-menu { text-align: center; padding: 60px 20px; }
-        h1 { color: #2ecc71; font-size: 2.8rem; margin-bottom: 40px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        /* [헤더 구역]: 제목, 소개, 뱃지 */
+        header {
+            text-align: center;
+            padding: 60px 20px 30px;
+        }
+        
+        h1 {
+            color: #004c97; /* 인천대 블루 */
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* 부드러운 그림자 */
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        /* 동아리 이름 neon 포인트 효과 */
+        .club-name {
+            color: #004c97;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(0, 76, 151, 0.4); /* 살짝 빛나는 네온 느낌 */
+        }
+        
+        /* 게임 개수 & 업데이트 안내 뱃지 */
+        .info-badge {
+            display: inline-block;
+            background: #ffffff;
+            color: #004c97;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 76, 151, 0.1);
+        }
 
-        .game-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+        /* [게임 카드 컨테이너] */
+        .game-container {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            padding: 20px;
+            flex: 1;
+        }
 
-        .game-card { 
-            background: #ffffff; 
-            border: none;
-            border-radius: 20px; 
-            padding: 30px; 
-            width: 240px; 
-            cursor: pointer; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); /* 부드러운 그림자 */
+        /* [개별 게임 카드 스타일] */
+        .game-card {
+            background: #ffffff;
+            border-radius: 20px; /* 제안해주신 20px 둥근 모서리 */
+            padding: 30px 20px;
+            width: 220px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05); /* 진하지 않은 깔끔한 그림자 */
             transition: all 0.3s ease;
             text-align: center;
+            border: 1px solid transparent;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 76, 151, 0.15);
+            border: 1px solid #004c97;
         }
 
-        .game-card:hover { 
-            transform: translateY(-10px); 
-            box-shadow: 0 15px 30px rgba(46, 204, 113, 0.2); 
-        }
+        /* 카드 내부 글자 배치 */
+        .game-card h2 { font-size: 55px; margin: 0 0 15px 0; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1)); }
+        .game-card h3 { color: #1d3557; margin: 0 0 5px 0; font-size: 1.3rem; font-weight: 800; }
+        .game-card .creator { color: #004c97; font-size: 0.95rem; font-weight: bold; margin: 0 0 15px 0; }
+        .game-card .desc { color: #7f8c8d; font-size: 0.9rem; margin: 0; line-height: 1.4; }
 
-        .game-card h2 { font-size: 50px; margin: 0; }
-        .game-card h3 { color: #34495e; margin-top: 15px; }
-
-        /* [버튼 스타일] */
-        .btn-back { 
-            position: absolute; top: 20px; left: 20px; padding: 10px 20px; 
-            cursor: pointer; background: #ffffff; color: #e74c3c; 
-            border: 2px solid #e74c3c; border-radius: 30px; font-weight: bold;
-            transition: 0.3s; z-index: 100;
-        }
-        .btn-back:hover { background: #e74c3c; color: white; }
-
-        /* [게임 화면 제어] */
-        .game-screen { display: none; position: relative; width: 100%; text-align: center; padding-top: 50px;}
-        .active { display: flex; flex-direction: column; align-items: center; }
-
-        /* --- 축구 타이핑 스타일 --- */
-        #typing-canvas { 
-            background: #dff9fb; /* 아주 밝은 하늘색 */
-            border: 5px solid #2ecc71; 
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        #typing-input { 
-            margin-top: 20px; padding: 15px; width: 300px; 
-            border: 2px solid #2ecc71; border-radius: 10px; font-size: 1.1rem;
-            outline: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        /* --- 벽돌 깨기 스타일 --- */
-        #brick-area { 
-            position: relative; width: 480px; height: 600px; 
-            border: 8px solid #3498db; background-color: #ffffff; 
-            border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .ball { position: absolute; background-color: #e74c3c; border-radius: 50%; }
-        .paddle { position: absolute; background-color: #3498db; border-radius: 5px; bottom: 10px; }
-        .brick { position: absolute; border-radius: 3px; }
-        #overlay-message { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            padding: 30px; background: rgba(255,255,255,0.95); 
-            border: 3px solid #3498db; color: #3498db; border-radius: 15px;
-            text-align: center; cursor: pointer; font-weight: bold; font-size: 1.5rem;
-        }
+        /* [푸터 로고] */
+        footer { padding: 40px 0; width: 100%; display: flex; justify-content: center; }
+        .inu-logo { width: 160px; opacity: 0.8; transition: opacity 0.3s; }
+        .inu-logo:hover { opacity: 1; }
     </style>
 </head>
 <body>
 
-    <div id="main-menu" class="game-screen active">
-        <h1>✨ MINI GAME HUB</h1>
-        <div class="game-container">
-            <div class="game-card" onclick="showGame('typing-screen')">
-                <h2>⚽</h2>
-                <h3>축구 타이핑</h3>
-                <p style="color:#7f8c8d; font-size:0.9rem;">단어를 입력해 득점하세요!</p>
-            </div>
-            <div class="game-card" onclick="showGame('brick-screen')">
-                <h2>🧱</h2>
-                <h3>벽돌 깨기</h3>
-                <p style="color:#7f8c8d; font-size:0.9rem;">공을 튕겨 벽돌을 깨세요!</p>
-            </div>
+    <header>
+        <h1>INU MINI GAME HUB</h1>
+        <p class="subtitle">무역학부 데이터 소모임 <span class="club-name">neon</span> 웹게임 아카이브 🚀</p>
+        <div class="info-badge">
+            🎮 현재 등록된 게임 4개 | ✨ 새 게임이 계속 추가됩니다!
         </div>
-    </div>
+    </header>
 
-    <div id="typing-screen" class="game-screen">
-        <button class="btn-back" onclick="location.reload()">메뉴로 돌아가기</button>
-        <canvas id="typing-canvas" width="700" height="500"></canvas>
-        <input type="text" id="typing-input" placeholder="여기에 단어를 입력하고 Enter!">
-    </div>
-
-    <div id="brick-screen" class="game-screen">
-        <button class="btn-back" onclick="location.reload()">메뉴로 돌아가기</button>
-        <div id="brick-area">
-            <div id="overlay-message">클릭해서 시작!</div>
+    <div class="game-container">
+        
+        <div class="game-card" onclick="location.href='games/jimin-typing/index.html'">
+            <h2>⚽</h2>
+            <h3>축구 타이핑</h3>
+            <p class="creator">지민 제작</p>
+            <p class="desc">단어를 빠르게 입력해<br>득점하세요!</p>
         </div>
+
+        <div class="game-card" onclick="location.href='games/park-brick/index.html'">
+            <h2>🧱</h2>
+            <h3>벽돌 깨기</h3>
+            <p class="creator">박OO 제작</p>
+            <p class="desc">각도를 맞춰<br>벽돌을 모두 깨세요!</p>
+        </div>
+
+        <div class="game-card" onclick="location.href='games/lee-trade-quiz/index.html'">
+            <h2>🚢</h2>
+            <h3>무역 퀴즈</h3>
+            <p class="creator">이OO 제작</p>
+            <p class="desc">무역과 물류 상식을<br>맞혀보세요!</p>
+        </div>
+        
+        <div class="game-card" onclick="location.href='games/choi-logistics/index.html'">
+            <h2>📦</h2>
+            <h3>물류 퍼즐</h3>
+            <p class="creator">최OO 제작</p>
+            <p class="desc">SCM 흐름을<br>완벽하게 연결하세요!</p>
+        </div>
+
     </div>
 
-    <script>
-        function showGame(screenId) {
-            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            if(screenId === 'typing-screen') startTypingGame();
-            if(screenId === 'brick-screen') setupBrickGame();
-        }
+    <footer>
+        <img src="https://www.inu.ac.kr/sites/inu/images/sub/symbol_mark_01.png" alt="INU Logo" class="inu-logo">
+    </footer>
 
-        // [축구 타이핑 로직]
-        function startTypingGame() {
-            const canvas = document.getElementById('typing-canvas');
-            const ctx = canvas.getContext('2d');
-            const input = document.getElementById('typing-input');
-            input.focus();
-            let words = ["손흥민", "이강인", "김민재", "해트트릭", "오프사이드", "인코텀즈", "SCM", "물류", "데이터"];
-            let falling = [];
-            let score = 0;
-
-            function spawn() {
-                falling.push({ 
-                    text: words[Math.floor(Math.random()*words.length)], 
-                    x: Math.random()*600 + 50, 
-                    y: 0,
-                    speed: 1 + Math.random() * 1.5 
-                });
-            }
-            const spawner = setInterval(spawn, 2000);
-
-            function draw() {
-                ctx.clearRect(0,0,700,500);
-                
-                // 점수 표시
-                ctx.fillStyle = "#2ecc71";
-                ctx.font = "bold 20px Arial";
-                ctx.fillText(`SCORE: ${score}`, 20, 40);
-
-                falling.forEach((w, i) => {
-                    w.y += w.speed;
-                    ctx.fillStyle = "#34495e";
-                    ctx.font = "bold 22px Arial";
-                    ctx.fillText(w.text, w.x, w.y);
-                    if(w.y > 500) falling.splice(i, 1);
-                });
-                requestAnimationFrame(draw);
-            }
-
-            input.onkeydown = (e) => {
-                if(e.key === 'Enter') {
-                    const beforeLength = falling.length;
-                    falling = falling.filter(w => w.text !== input.value);
-                    if(falling.length < beforeLength) score += 10;
-                    input.value = "";
-                }
-            }
-            draw();
-        }
-
-        // [벽돌 깨기 로직]
-        function setupBrickGame() {
-            const overlay = document.getElementById('overlay-message');
-            overlay.onclick = () => {
-                overlay.innerHTML = "벽돌 깨기 게임 엔진 준비 중!<br>(여기에 상세 로직이 들어갑니다)";
-                setTimeout(() => { overlay.style.display = 'none'; }, 1000);
-            };
-        }
-    </script>
 </body>
 </html>
-"""
-
-# HTML 렌더링
-display(HTML(html_code))
-
