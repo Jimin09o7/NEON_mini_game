@@ -62,5 +62,59 @@
         
         .game-card .desc { 
             color: #7f8c8d; font-size: 0.9rem; margin: 0; line-height: 1.4;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.8em;
+        }
+
+        /* 클릭 유도 버튼 */
+        .play-btn {
+            background: #f0f5fa; color: #004c97; padding: 8px 20px;
+            border-radius: 20px; font-size: 0.85rem; font-weight: bold; transition: 0.3s; width: 80%;
+        }
+        .game-card:hover .play-btn { background: #004c97; color: #ffffff; }
+
+        footer { padding: 40px 0; width: 100%; display: flex; justify-content: center; }
+        .inu-logo { width: 160px; opacity: 0.8; transition: opacity 0.3s; }
+        .inu-logo:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="season-tag">2026 Spring Project</div>
+        <h1>INU MINI GAME HUB</h1>
+        <p class="subtitle">무역학부 데이터 소모임 <span class="club-name">neon</span> 웹게임 아카이브 🚀</p>
+        <div class="meta-info">자유 제작 프로젝트 | Last Updated: 2026. 03. 13</div>
+        <div class="info-badge">🎮 현재 등록된 게임 4개</div>
+    </header>
+
+    <div class="game-container">
+        
+        <div class="game-card" onclick="location.href='games/jimin-brick/index.html'">
+            <div class="card-content">
+                <h2>🧱</h2>
+                <h3>벽돌 깨기</h3>
+                <p class="creator">회장 지민 제작</p>
+                <p class="desc">각도를 맞춰 벽돌을 모두 깨보세요!</p>
+            </div>
+            <div class="play-btn">Play ➔</div>
+        </div>
+
+        <div class="game-card" onclick="location.href='games/park-typing/index.html'">
+            <div class="card-content">
+                <h2>⚽</h2>
+                <h3>축구 타이핑</h3>
+                <p class="creator">박OO 제작</p>
+                <p class="desc">단어를 빠르게 입력해 득점하세요!</p>
+            </div>
+            <div class="play-btn">Play ➔</div>
+        </div>
+
+        <div class="game-card" onclick="location.href='games/lee-trade-quiz/index.html'">
+            <div class="card-content">
+                <h2>🚢</h2>
+                <h3>무역 퀴즈</h3>
+                <p class="creator">이OO 제작</p>
+                <p class="desc">무역과 물류 상식을 맞혀보세요!</p>
+            </div>
+            <div class
 
